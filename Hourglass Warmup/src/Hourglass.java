@@ -1,3 +1,6 @@
+//This class prints out a ten line hourglass using limited println statements
+//@author Jon Lee
+//@version October 26, 2018
 public class Hourglass {
 	public static void main(String[] args) {
 		base();
