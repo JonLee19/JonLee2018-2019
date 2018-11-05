@@ -9,8 +9,9 @@ public class HourglassVersion2 {
 
 	}
 	public static void base() {
-		System.out.println("|\"\"\"\"\"\"\"\"\"\"|");
+		listofchars('|', 1);
 		listofchars('\"', 10);
+		listofchars('|', 1);
 	}
 	public static void tophalf() {
 		for (int i=1; i<5; i++) {
