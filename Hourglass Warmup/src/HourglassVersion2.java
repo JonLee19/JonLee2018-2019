@@ -12,6 +12,7 @@ public class HourglassVersion2 {
 		listofchars('|', 1);
 		listofchars('\"', 10);
 		listofchars('|', 1);
+		listofchars('\n', 1);
 	}
 	public static void tophalf() {
 		for (int i=1; i<5; i++) {
@@ -25,6 +26,7 @@ public class HourglassVersion2 {
 				System.out.print(":");
 			}
 			*/
+			listofchars(':', 10-2*i);
 			listofchars('/', 1);
 			listofchars('\n', 1);
 			//System.out.print("/"+"\n");
@@ -34,6 +36,7 @@ public class HourglassVersion2 {
 		listofchars(' ', 5);
 		listofchars('|', 2);
 		listofchars(' ', 5);
+		listofchars('\n', 1);
 	}
 	public static void bottomhalf() {
 		for (int i=4; i>0; i--) {

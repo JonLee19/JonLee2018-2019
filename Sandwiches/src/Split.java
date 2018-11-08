@@ -52,13 +52,13 @@ public class Split {
 		}
 	}
 	*/
-	
-
+	String input1 = "breadapplespineapplesbreadlettucetomatobaconmayohambreadcheese";
+	System.out.println(sandwhichSplitter(input1));
 	//Your task pt 2:
 
 	//Write a method that take in a string like
 
-	 String input2 = "apples pineapples bread lettuce tomato bacon mayo ham bread cheese";
+	 String input2 = "apples pineapples bread lettuce tomato bacon mayo ham bread cheese bread";
 	 System.out.println(sandwhichSplitter(input2));
 	
 	//String splitup = Arrays.toString(input.split(" "));
@@ -78,22 +78,35 @@ public class Split {
 	 String input = "applespineapplesbreadlettucetomatobaconmayohambreadcheese";
 		public static String sandwhichSplitter(String input) {
 			int breadcount = 0;
+			//create variable breadcount
+			int firstbread = input.indexOf("bread");
+			//finds first occurrence of bread
 			int lastbread = 0;
+			//initialize variables to find the last occurrence of bread
 			for (int i=0; i<input.length()-4; i++) {
 				if (input.substring(i,i+5).equals("bread")) {
 					breadcount++;
 					lastbread = i;
-					//System.out.println(breadcount);
+					//traversing the string, count the number of breads,
+					//and also set lastbread to the index of the first letter
+					//in the final instance of bread
 				}
 			}
-			int firstbread = input.indexOf("bread");
-			//System.out.println(firstbread);
+			if (breadcount<=2) {
+				throw new IllegalArgumentException("There is no inner bread. Please give me a better sandwhich.");
+			}
 			String[] array = input.split("bread");
-			//System.out.println(Arrays.toString(array));
-			return((Arrays.toString(array)).substring(firstbread+3, lastbread-2));
+			//split array based on bread
+			//System.out.println(firstbread+4);
+			//System.out.println(lastbread-(5*(breadcount-2)));
+			//used for troubleshooting
+			return((Arrays.toString(array)).substring(firstbread+6-breadcount, lastbread-(5*(breadcount-2))));
+			//Converts Array to String, then returns a substring 
+			//from that String with the indexes of the first and last breads
+			//the exact numbers used to create the substring are adjusted
 			//because the Arrays.toString adds ", "
-			//System.out.println((array[1]);
 		}
+		
 }
 
 
