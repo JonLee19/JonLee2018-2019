@@ -59,7 +59,7 @@ public class Split {
 	//Write a method that take in a string like
 
 	 String input2 = "apples pineapples bread lettuce tomato bacon mayo ham bread cheese bread";
-	 System.out.println(sandwhichSplitter(input2));
+	 System.out.println(sandwhichSplitterPart2(input2));
 	
 	//String splitup = Arrays.toString(input.split(" "));
 	
@@ -75,7 +75,7 @@ public class Split {
 	*/
 
 	 }
-	 String input = "applespineapplesbreadlettucetomatobaconmayohambreadcheese";
+	 //String input = "applespineapplesbreadlettucetomatobaconmayohambreadcheese";
 		public static String sandwhichSplitter(String input) {
 			int breadcount = 0;
 			//create variable breadcount
@@ -106,7 +106,36 @@ public class Split {
 			//the exact numbers used to create the substring are adjusted
 			//because the Arrays.toString adds ", "
 		}
-		
+		public static String sandwhichSplitterPart2(String input) {
+			int breadcount = 0;
+			//create variable breadcount
+			int firstbread = input.indexOf("bread");
+			//finds first occurrence of bread
+			int lastbread = 0;
+			//initialize variables to find the last occurrence of bread
+			for (int i=0; i<input.length()-4; i++) {
+				if (input.substring(i,i+5).equals("bread")) {
+					breadcount++;
+					lastbread = i;
+					//traversing the string, count the number of breads,
+					//and also set lastbread to the index of the first letter
+					//in the final instance of bread
+				}
+			}
+			if (breadcount<=2) {
+				throw new IllegalArgumentException("There is no inner bread. Please give me a better sandwhich.");
+			}
+			String[] array = input.split("bread");
+			//split array based on bread
+			//System.out.println(firstbread+4);
+			//System.out.println(lastbread-(5*(breadcount-2)));
+			//used for troubleshooting
+			return((Arrays.toString(array)).substring(1, lastbread-(5*(breadcount-2))));
+			//Converts Array to String, then returns a substring 
+			//from that String with the indexes of the first and last breads
+			//the exact numbers used to create the substring are adjusted
+			//because the Arrays.toString adds ", "
+		}
 }
 
 
