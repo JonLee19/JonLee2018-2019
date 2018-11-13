@@ -2,7 +2,6 @@
 //@author Jon Lee
 //@version November 8, 2018
 import java.util.Arrays;
-import java.util.Scanner;
 
 public class ArraysLab3 {
 	
