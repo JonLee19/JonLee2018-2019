@@ -26,26 +26,33 @@ public class FracCalc {
     	String operand2 = splitted[2];
     	String answer1 = stringToImproperFrac(operand1);
     	String answer2 = stringToImproperFrac(operand2);
-    	System.out.println(answer2);
     	return (answer2);
     }
     
     public static String stringToImproperFrac(String s) {
     	String[] mixednumcomponents = s.split("_");
-    	if (mixednumcomponents.length>2) {
-	    	int wholenumber = Integer.parseInt(mixednumcomponents[0]);
+    	//for later: int wholenumber = Integer.parseInt(mixednumcomponents[0]);
+    	int wholenumber = 0;
+    	int numerator = 0;
+    	int denominator = 1;
+    	if (mixednumcomponents.length>1) {
+	    	wholenumber = Integer.parseInt(mixednumcomponents[0]);
 	    	String[] fraction = mixednumcomponents[1].split("/");
-	    	int numerator = Integer.parseInt(fraction[0]);
-	    	int denominator = Integer.parseInt(fraction[1]);
-	    	return("whole:"+wholenumber+" numerator:"+numerator+" denominator:"+denominator);
+	    	numerator = Integer.parseInt(fraction[0]);
+	    	denominator = Integer.parseInt(fraction[1]);
     	}
     	else {
-    		int wholenumber = 0;
+    		wholenumber = 0;
 	    	String[] fraction = s.split("/");
-	    	int numerator = Integer.parseInt(fraction[0]);
-	    	int denominator = Integer.parseInt(fraction[1]);
-	    	return("whole:"+wholenumber+" numerator:"+numerator+" denominator:"+denominator);
+	    	if (fraction.length>1) {
+	    		numerator = Integer.parseInt(fraction[0]);
+	    		denominator = Integer.parseInt(fraction[1]);
+	    	}
+	    	else {
+	    		wholenumber = Integer.parseInt(fraction[0]);
+	    	}
     	}
+    	return("whole:"+wholenumber+" numerator:"+numerator+" denominator:"+denominator);
     }
     
     public static String toImproperFrac(int wholenumber, int numerator, int denominator) {
