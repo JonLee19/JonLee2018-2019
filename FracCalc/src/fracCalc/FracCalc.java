@@ -2,12 +2,12 @@ package fracCalc;
 import java.util.*;
 public class FracCalc {
 
-    public static void main(String[] args) 
-    {
+    public static void main(String[] args) {
     	Scanner console = new Scanner(System.in);
     	boolean done = false;
     	System.out.println("Pleace print an expression with two operands.");
     	String input = console.nextLine();
+    	//open scanner to take in an expression
     	while (done!=true) {
     		//later try !answer.equals(quit)
     		System.out.println(produceAnswer(input));
@@ -17,18 +17,21 @@ public class FracCalc {
     			done=true;
     		}
     	}
-    		
+    	console.close();	
     }
     public static String produceAnswer(String input) {
     	String[] splitted = input.split(" ");
     	int[] operand1 = stringToImproperFrac(splitted[0]);
     	String operator = splitted[1];
     	int[] operand2 = stringToImproperFrac(splitted[2]);
+    	//split on a space to separate the operands and operator, and then 
+    	//convert operands to improper fractions where the components make up an array
     	int[] answer = new int[2];
     	if (operator.equals("-")||operator.equals("+")) {
     		if (operator.equals("-")) {
     			operand2[0]=-operand2[0];
     		}
+    		//subtraction is just adding by the negative of the second operand
     		answer[0] = operand1[0]*operand2[1]+operand2[0]*operand1[1];
     		answer[1] = operand1[1]*operand2[1];
     		//cross multiply the numerators by the other operand's denominator
@@ -36,14 +39,22 @@ public class FracCalc {
     	}
     	else {
     		if (operator.equals("/")) {
-    			operand2[0]=operand2[1];
-    			//division is the same as multiplication by the reciprocal
+    			int temp=operand2[1];
+    			operand2[1]=operand2[0];
+    			operand2[0]=temp;
+    			//division is the same as multiplication by the reciprocal of the second operand
     		}
     		answer[0] = operand1[0]*operand2[0];
     		answer[1] = operand1[1]*operand2[1];
     		//multiply numerators and denominators in fraction multiplication
     	}
-    	return Arrays.toString(answer);
+    	//return (answer[0]+"/"+answer[1]);
+    	int gcf = gcf(answer[0], answer[1]);
+    	answer[0] = answer[0]/gcf;
+    	answer[1] = answer[1]/gcf;
+    	return toMixedNum(answer[0], answer[1]);
+    	//find gcf of numerator and denominator of answer, reduce the fraction by dividing 
+    	//both components by that gcf, and then return as a mixed number
     }
     
     public static int[] stringToImproperFrac(String s) {
@@ -86,8 +97,14 @@ public class FracCalc {
 		if (denominator == 0) {
 			throw new IllegalArgumentException("The denominator is 0, please give the right input.");
 		}
+		if (wholenumber<0) {
+			numerator=-numerator;
+		}
 		int answer = wholenumber*denominator+numerator;
+		//convert whole number to the appropriate fraction and then add to numerator
+		//to produce the final numerator, or "answer"
 		int[] improperfrac = {answer, denominator};
+		//return an array made of the final numerator, or "answer", and the denominator
 		return improperfrac;
 	}
 	public static String toMixedNum(int numerator, int denominator) {
@@ -97,15 +114,16 @@ public class FracCalc {
 		}
 		int wholenumber = numerator/denominator;
 		//whole number is the result of division where the remainder is ignored
-		if (wholenumber==0) {
+		/*if (wholenumber==0) {
 			return ("That's not an improper fraction, your answer is "+numerator+"/"+denominator);
 			//if the numerator is not greater than the denominator, returns error above
 		}
-		else {
-			int remainder = numerator%denominator;
+		*/
+		//else {
+			int remainder = (int) absValue(numerator%denominator);
 			//remainder uses mod (%) which gives only the remainder when dividing
 			return (wholenumber+"_"+remainder+"/"+denominator);
-		}
+		//}
 	}
 	public static int gcf(int num1, int num2) {
 		//finds the largest factor shared by both given values
@@ -152,17 +170,4 @@ public class FracCalc {
 			return number;
 		}
 	}
-    
-    
-    
-    // ** IMPORTANT ** DO NOT DELETE THIS FUNCTION.  This function will be used to test your code
-    // This function takes a String 'input' and produces the result
-    //
-    // input is a fraction string that needs to be evaluated.  For your program, this will be the user input.
-    //      e.g. input ==> "1/2 + 3/4"
-    //        
-    // The function should return the result of the fraction after it has been calculated
-    //      e.g. return ==> "1_1/4"
-
-    // TODO: Fill in the space below with any helper methods that you think you will need
 }
