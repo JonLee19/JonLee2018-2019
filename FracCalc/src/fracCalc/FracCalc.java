@@ -26,6 +26,9 @@ public class FracCalc {
     	int[] operand2 = stringToImproperFrac(splitted[2]);
     	//split on a space to separate the operands and operator, and then 
     	//convert operands to improper fractions where the components make up an array
+    	if (operator.equals("+")||operator.equals("-")||operator.equals("*")||operator.equals("/")) {
+    		return ("ERROR: Input is in an invalid format.");
+    	}
     	int[] answer = new int[2];
     	if (operator.equals("-")||operator.equals("+")) {
     		if (operator.equals("-")) {
@@ -48,7 +51,9 @@ public class FracCalc {
     		answer[1] = operand1[1]*operand2[1];
     		//multiply numerators and denominators in fraction multiplication
     	}
-    	//return (answer[0]+"/"+answer[1]);
+    	if (answer[1]==0) {
+    		return("ERROR: Cannot divide by zero.");
+    	}
     	int gcf = gcf(answer[0], answer[1]);
     	answer[0] = answer[0]/gcf;
     	answer[1] = answer[1]/gcf;
@@ -59,7 +64,6 @@ public class FracCalc {
     
     public static int[] stringToImproperFrac(String s) {
     	String[] mixednumcomponents = s.split("_");
-    	//for later: int wholenumber = Integer.parseInt(mixednumcomponents[0]);
     	int wholenumber = 0;
     	int numerator = 0;
     	int denominator = 1;
@@ -112,23 +116,34 @@ public class FracCalc {
 		if (denominator == 0) {
 			throw new IllegalArgumentException("The denominator is 0, please give the right input.");
 		}
+		if (numerator==0) {
+			return ("0");
+		}
+		//if numerator is 0, that means the fraction is equal to 0
 		int wholenumber = numerator/denominator;
 		//whole number is the result of division where the remainder is ignored
-		/*if (wholenumber==0) {
-			return ("That's not an improper fraction, your answer is "+numerator+"/"+denominator);
-			//if the numerator is not greater than the denominator, returns error above
+		if (wholenumber==0) {
+			if (denominator<0) {
+				numerator=-numerator;
+				denominator=-denominator;
+			}
+			return (numerator+"/"+denominator);
+			//if the numerator is not greater than the denominator, returns original fraction
 		}
-		*/
-		//else {
-			int remainder = (int) absValue(numerator%denominator);
-			//remainder uses mod (%) which gives only the remainder when dividing
-			return (wholenumber+"_"+remainder+"/"+denominator);
-		//}
+		int remainder = absValue(numerator%denominator);
+		denominator =  absValue(denominator);
+		//remainder uses mod (%) which gives only the remainder when dividing
+		//now that all division has been completed, convert denominator to a positive
+		//because denominators of fractions are always written as positives
+		if (remainder==0) {
+			return (""+wholenumber);
+		}
+		return (wholenumber+"_"+remainder+"/"+denominator);
 	}
 	public static int gcf(int num1, int num2) {
 		//finds the largest factor shared by both given values
 		int answer = 1;
-		for (int i = (int) absValue(num1); i > 1; i--) {
+		for (int i = absValue(num1); i > 1; i--) {
 			/*starting from the 1st input (either works), count down while testing factors
 			 * to see if both num1 and num2 are divisible by them
 			 */
@@ -159,7 +174,7 @@ public class FracCalc {
 			}
 		}
 	}
-	public static double absValue(double number) {
+	public static int absValue(int number) {
 		//if number is negative, returns the opposite; 
 		//if number is positive, returns number
 		//either result is the positive value of number
