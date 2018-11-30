@@ -21,6 +21,104 @@ public class FracCalc {
     }
     public static String produceAnswer(String input) {
     	String[] splitted = input.split(" ");
+    	int[] answer = stringToImproperFrac(splitted[0]);
+    	//String operator = splitted[1];
+    	//int[] operand2 = stringToImproperFrac(splitted[2]);
+    	
+    	for (int i = 2; i<splitted.length; i+=2) {
+    		String operator = splitted[i-1];
+	    	if (!(operator.equals("+")||operator.equals("-")||operator.equals("*")||operator.equals("/"))) {
+	    		return ("ERROR: Input is in an invalid format.");
+	    	}
+    		int[] operand2 = stringToImproperFrac(splitted[i]);
+    		answer = doMath(answer, operator, operand2);	
+    	}
+    	//split on a space to separate the operands and operator, and then 
+    	//convert operands to improper fractions where the components make up an array
+		if (answer[1]==0) {
+    		return("ERROR: Cannot divide by zero.");
+    	}
+		return toMixedNum(answer[0], answer[1]);
+    }
+    public static int[] doMath(int[] answer, String operator, int[] operand2) {
+    	if (operator.equals("-")||operator.equals("+")) {
+    		if (operator.equals("-")) {
+    			operand2[0]=-operand2[0];
+    		}
+    		//subtraction is just adding by the negative of the second operand
+    		answer[0] = answer[0]*operand2[1]+operand2[0]*answer[1];
+    		answer[1] = answer[1]*operand2[1];
+    		//cross multiply the numerators by the other operand's denominator
+    		//and then add to get your final answer's numerator
+    	}
+    	else {
+    		if (operator.equals("/")) {
+    			int temp=operand2[1];
+    			operand2[1]=operand2[0];
+    			operand2[0]=temp;
+    			//division is the same as multiplication by the reciprocal of the second operand
+    		}
+    		answer[0] = answer[0]*operand2[0];
+    		answer[1] = answer[1]*operand2[1];
+    		//multiply numerators and denominators in fraction multiplication
+    	}
+    	
+    	int gcf = gcf(answer[0], answer[1]);
+    	answer[0] = answer[0]/gcf;
+    	answer[1] = answer[1]/gcf;
+    	return answer;
+    	//find gcf of numerator and denominator of answer, reduce the fraction by dividing 
+    	//both components by that gcf, and then return as a mixed number
+    }
+    /*
+    public static String produceAnswer(String input) {
+    	String[] splitted = input.split(" ");
+    	int[][] operand = new int[splitted.length/2+1][3];
+    	for (int i = 0; i<splitted.length; i++) {
+	    	operand[i] = stringToImproperFrac(splitted[2(i)]);
+	    	String operator = splitted[2(i+1)];
+	    	//split on a space to separate the operands and operator, and then 
+	    	//convert operands to improper fractions where the components make up an array
+    	}
+    	if (operator.equals("+")||operator.equals("-")||operator.equals("*")||operator.equals("/")) {
+    		return ("ERROR: Input is in an invalid format.");
+    	}
+    	int[] answer = new int[2];
+    	if (operator.equals("-")||operator.equals("+")) {
+    		if (operator.equals("-")) {
+    			operand2[0]=-operand2[0];
+    		}
+    		//subtraction is just adding by the negative of the second operand
+    		answer[0] = operand1[0]*operand2[1]+operand2[0]*operand1[1];
+    		answer[1] = operand1[1]*operand2[1];
+    		//cross multiply the numerators by the other operand's denominator
+    		//and then add to get your final answer's numerator
+    	}
+    	else {
+    		if (operator.equals("/")) {
+    			int temp=operand2[1];
+    			operand2[1]=operand2[0];
+    			operand2[0]=temp;
+    			//division is the same as multiplication by the reciprocal of the second operand
+    		}
+    		answer[0] = operand1[0]*operand2[0];
+    		answer[1] = operand1[1]*operand2[1];
+    		//multiply numerators and denominators in fraction multiplication
+    	}
+    	if (answer[1]==0) {
+    		return("ERROR: Cannot divide by zero.");
+    	}
+    	int gcf = gcf(answer[0], answer[1]);
+    	answer[0] = answer[0]/gcf;
+    	answer[1] = answer[1]/gcf;
+    	return toMixedNum(answer[0], answer[1]);
+    	//find gcf of numerator and denominator of answer, reduce the fraction by dividing 
+    	//both components by that gcf, and then return as a mixed number
+    }
+    */
+    /*
+    public static String produceAnswer(String input) {
+    	String[] splitted = input.split(" ");
     	int[] operand1 = stringToImproperFrac(splitted[0]);
     	String operator = splitted[1];
     	int[] operand2 = stringToImproperFrac(splitted[2]);
@@ -61,7 +159,7 @@ public class FracCalc {
     	//find gcf of numerator and denominator of answer, reduce the fraction by dividing 
     	//both components by that gcf, and then return as a mixed number
     }
-    
+    */
     public static int[] stringToImproperFrac(String s) {
     	String[] mixednumcomponents = s.split("_");
     	int wholenumber = 0;
