@@ -66,7 +66,6 @@ public class FracCalc {
     		answer[1] = answer[1]*operand2[1];
     		//multiply numerators and denominators in fraction multiplication
     	}
-    	
     	int gcf = gcf(answer[0], answer[1]);
     	answer[0] = answer[0]/gcf;
     	answer[1] = answer[1]/gcf;
@@ -74,7 +73,6 @@ public class FracCalc {
     	//find gcf of numerator and denominator of answer, reduce the fraction by dividing 
     	//both components by that gcf, and then return as a mixed number
     }
-    
     public static int[] stringToImproperFrac(String s) {
     	//convert operands to improper fractions where the components make up an array
     	String[] mixednumcomponents = s.split("_");
