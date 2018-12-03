@@ -19,9 +19,11 @@ public class FracCalc {
     	}
     	console.close();	
     }
+    //now trying to figure out order of operations
     public static String produceAnswer(String input) {
     	String[] splitted = input.split(" ");
-    	int[] answer = stringToImproperFrac(splitted[0]);
+    	int[] answer = new int[2];
+    	answer = stringToImproperFrac(splitted[0]);
     	//split on a space to separate the operands and operators
     	for (int i = 2; i<splitted.length; i+=2) {
     		String operator = splitted[i-1];
@@ -30,8 +32,12 @@ public class FracCalc {
 	    		return ("ERROR: Input is in an invalid format.");
 	    	}
 	    	//if operator is not one of the 4 basic operations, return error
-    		int[] operand2 = stringToImproperFrac(splitted[i]);
+	    	int[] operand2 = stringToImproperFrac(splitted[i]);
     		//update operand2 to the next operand, which is every other array element
+	    	if (operator.equals("-")||operator.equals("+")) {
+	    		
+	    	}
+    		
     		answer = doMath(answer, operator, operand2);
     		//produce a new result from each successive operation, storing it in answer
     	} 
