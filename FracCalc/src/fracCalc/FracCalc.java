@@ -9,7 +9,6 @@ public class FracCalc {
     	String input = console.nextLine();
     	//open scanner to take in an expression
     	while (done!=true) {
-    		//later try !answer.equals(quit)
     		System.out.println(produceAnswer(input));
     		System.out.println("Type \"quit\" to end or new values to try again.");
     		input = console.nextLine();
@@ -21,34 +20,73 @@ public class FracCalc {
     }
     //now trying to figure out order of operations
     public static String produceAnswer(String input) {
+    	int[] multipliedanswer = {1, 1};
+    	int[] addedanswer = {0, 1};
     	String[] splitted = input.split(" ");
-    	int[] answer = new int[2];
-    	answer = stringToImproperFrac(splitted[0]);
     	//split on a space to separate the operands and operators
+    	//int[] result = stringToImproperFrac(splitted[0]);
+    	if (splitted.length<4) {
+    		return toMixedNum(doMath(stringToImproperFrac(splitted[0]), splitted[1], stringToImproperFrac(splitted[2])));
+    	}
     	for (int i = 2; i<splitted.length; i+=2) {
     		String operator = splitted[i-1];
-    		//operators are every other array element after splitting on " "
-	    	if (!(operator.equals("+")||operator.equals("-")||operator.equals("*")||operator.equals("/"))) {
+    		if (!(operator.equals("+")||operator.equals("-")||operator.equals("*")||operator.equals("/"))) {
 	    		return ("ERROR: Input is in an invalid format.");
 	    	}
 	    	//if operator is not one of the 4 basic operations, return error
-	    	int[] operand2 = stringToImproperFrac(splitted[i]);
-    		//update operand2 to the next operand, which is every other array element
-	    	if (operator.equals("-")||operator.equals("+")) {
-	    		
+	    	//parse for incorrect inputs
+	    	/*for (int j = 0; j < splitted[i].length(); j++) {
+	    		String character = " "+splitted[i].charAt(i);
+		    	if (!(character.equals("0")||character.equals("1")||character.equals("2")||character.equals("3")||character.equals("4")||character.equals("5")||character.equals("6")||character.equals("7")||character.equals("8")||character.equals("9")||character.equals("_")||character.equals("/"))) {
+		    		return ("ERROR: Input is in an invalid format.");
+		    	}
 	    	}
-    		
-    		answer = doMath(answer, operator, operand2);
-    		//produce a new result from each successive operation, storing it in answer
-    	} 
-		if (answer[1]==0) {
+	    	*/
+    		int[] operand2 = stringToImproperFrac(splitted[i]);
+    		//update operand2 to the next operand, which is every other array element
+    		if (operator.equals("/")||operator.equals("*")) {
+    				int temp = i;
+		    		multipliedanswer = stringToImproperFrac(splitted[i-2]);
+		    		while (operator.equals("*")||operator.equals("/")) {
+		    			multipliedanswer = doMath(multipliedanswer, operator, operand2);
+		    			i+=2;
+		    			operator = splitted[i-1];
+		    			operand2 = stringToImproperFrac(splitted[i]);
+		    			//System.out.println("operator is:"+ operator+"; multipliedanswer is"+ Arrays.toString(multipliedanswer));
+		    		}
+		    		i-=2;
+	    			String preoperator;
+	    			if (temp>2) {
+	    				preoperator = splitted[temp-3];
+	    			}
+	    			else {
+	    				preoperator = "+";
+	    			}
+	    			addedanswer = doMath(addedanswer, preoperator, multipliedanswer);
+	    			//once a series of multiplied numbers has been computed, add it back to added answer
+	    			multipliedanswer[0] = 1;
+	    			multipliedanswer[1] = 1;
+	    			//reset multipliedanswer to 1, because multiplying or dividing by one makes no difference
+    		}
+		    else{  
+		    	//means (operator.equals("-")||operator.equals("+")) 
+		    	if (i==2) {
+		    		addedanswer = doMath(addedanswer, operator, stringToImproperFrac(splitted[0]));
+		    	}
+		    	else {
+		    		addedanswer = doMath(addedanswer, operator, operand2);
+		    	}
+		    }
+		   //System.out.println(Arrays.toString(multipliedanswer)+", "+Arrays.toString(addedanswer));
+    	}
+		if (addedanswer[1]==0) {
     		return("ERROR: Cannot divide by zero.");
     	}
 		/*if one operand's denominator is 0, the final fraction's denominator will also be 0
 	     *because the only math performed on the denominator is multiplication
 		 *and dividing by zero is not allowed for this calculator, so return error
 		 */
-		return toMixedNum(answer[0], answer[1]);
+		return toMixedNum(addedanswer);
     }
     public static int[] doMath(int[] answer, String operator, int[] operand2) {
     	if (operator.equals("-")||operator.equals("+")) {
@@ -126,8 +164,10 @@ public class FracCalc {
 		//return an array made of the final numerator and denominator
 		return improperfrac;
 	}
-	public static String toMixedNum(int numerator, int denominator) {
+	public static String toMixedNum(int[] improperfraction) {
 		//converts an improper fraction to mixed number using math rules
+		int numerator = improperfraction[0];
+		int denominator = improperfraction[1];
 		if (numerator==0) {
 			return ("0");
 		}
